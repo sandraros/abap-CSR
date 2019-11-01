@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_CSR_SUPER</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>Super class of all data classes</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_CSR_SUPER</CLSNAME>
+     <CMPNAME>GET_LANGUAGE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>GET_LANGUAGE</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_CSR_SUPER</CLSNAME>
+     <CMPNAME>GET_NAME</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>GET_NAME</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_CSR_SUPER</CLSNAME>
+     <CMPNAME>MATCH</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>MATCH</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

@@ -1,0 +1,55 @@
+class ZCL_CSR_8859_1_IT definition
+  public
+  inheriting from ZCL_CSR_8859_1
+  create public .
+
+public section.
+
+*  data NGRAMS_8859_1_IT type TY_NGRAMS_SBCS .
+
+  methods CONSTRUCTOR .
+
+  methods GET_LANGUAGE
+    redefinition .
+  methods MATCH
+    redefinition .
+protected section.
+private section.
+ENDCLASS.
+
+
+
+CLASS ZCL_CSR_8859_1_IT IMPLEMENTATION.
+
+
+  method CONSTRUCTOR.
+
+    super->constructor( ).
+    CONCATENATE
+    '20616C20636820636F20646520646920652020696C20696E206C6120706520707220756E612063612064612070612073'
+    '61746F636865636F6E64656C64692065206165206365206465206965206C652070652073656C20656C6C656E74657220'
+    '686520692061692063692064692073696120696C20696E20696F6E6C61206C65206C69206C6C616E65206E69206E6F20'
+    '6E74656F20616F20646F20696F20736F6E206F6E65706572726120726520736920746120746520746920746F207A696F'
+    INTO ngrams.
+*    INTO ngrams_8859_1_it.
+
+  endmethod.
+
+
+  method GET_LANGUAGE.
+
+    language = 'it'.
+
+  endmethod.
+
+
+  method MATCH.
+
+    result = match_sbcs( det ).
+*        det        = det
+*        ngrams     = ngrams_8859_1_it
+*        charmap    = charmap_8859_1
+*    ).
+
+  endmethod.
+ENDCLASS.
