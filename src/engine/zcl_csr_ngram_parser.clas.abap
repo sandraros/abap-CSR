@@ -108,7 +108,11 @@ CLASS zcl_csr_ngram_parser IMPLEMENTATION.
         IF NOT ( mb = '20' AND ignore_space = abap_true ).
           add_byte( byte ).
         ENDIF.
-        IF mb = '20'. ignore_space = abap_true. ELSE. ignore_space = abap_false. ENDIF.
+        IF mb = '20'.
+          ignore_space = abap_true.
+        ELSE.
+          ignore_space = abap_false.
+        ENDIF.
       ENDIF.
       ADD 1 TO offset.
     ENDDO.

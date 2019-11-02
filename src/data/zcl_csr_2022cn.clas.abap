@@ -1,4 +1,4 @@
-"! <p class="shorttext synchronized" lang="en">ISO-2022-CN</p>
+"! <p class="shorttext synchronized" lang="en">Chinese</p>
 "!
 CLASS zcl_csr_2022cn DEFINITION
   PUBLIC

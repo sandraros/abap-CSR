@@ -1,4 +1,4 @@
-"! <p class="shorttext synchronized" lang="en">Japanese</p>
+"! <p class="shorttext synchronized" lang="en">Japanese Shift_JIS</p>
 "!
 CLASS zcl_csr_sjis DEFINITION
   PUBLIC
