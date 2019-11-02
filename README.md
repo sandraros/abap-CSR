@@ -9,11 +9,11 @@ It should not be used productively because the result can be incorrect. A human 
 
 ## CREDITS
 
-This is a porting of the Charset Recognizer C++ program provided in the ICU library (http://site.icu-project.org/). The concerned files in directory \source\i18n are: csdetect.cpp, csmatch.cpp, csr2022.cpp, csrecog.cpp, csrmbcs.cpp, csrsbcs.cpp, csrucode.cpp, csrutf8.cpp.
+This is a porting of the Character Set Detection C++ program provided in the ICU library (http://userguide.icu-project.org/conversion/detection). The concerned files in the directory `\source\i18n` are: `csdetect.cpp`, `csmatch.cpp`, `csr2022.cpp`, `csrecog.cpp`, `csrmbcs.cpp`, `csrsbcs.cpp`, `csrucode.cpp`, `csrutf8.cpp`.
 
 ## RESTRICTIONS
 
-Currently, only SBCS are implemented (ISO-8859-x, Windows-1251, Windows-1256). Remaining work: UTF-32, MBCS and ISO-2022-* (CJK)
+Currently, only Single-Byte Character Sets are implemented (ISO-8859-x, Windows-1251, Windows-1256). Remaining work: UTF-32, MBCS and ISO-2022-* (CJK)
 
 Possible improvement: in the ICU library, UTF-16 and UTF-32 are only detected based on the presence of the Byte Order Mark at the beginning of the string -> it should be feasible to convert the current data for each language and character set into UTF (instead of 3 bytes for each SBCS ngram, use 12 bytes for UTF-32, and variable number of bytes for UTF-16). For UTF-8, the detection is fine but the language is not detected, it could be implemented the same way.
 
