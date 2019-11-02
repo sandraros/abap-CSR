@@ -13,7 +13,7 @@ This is a porting of the Charset Recognizer C++ program provided in the ICU libr
 
 ## RESTRICTIONS
 
-Currently, only SBCS are implemented (ISO-8859-*, Windows-1251, Windows-1256). Remaining work: UTF-32, MBCS and ISO-2022-* (CJK)
+Currently, only SBCS are implemented (ISO-8859-x, Windows-1251, Windows-1256). Remaining work: UTF-32, MBCS and ISO-2022-* (CJK)
 
 Possible improvement: in the ICU library, UTF-16 and UTF-32 are only detected based on the presence of the Byte Order Mark at the beginning of the string -> it should be feasible to convert the current data for each language and character set into UTF (instead of 3 bytes for each SBCS ngram, use 12 bytes for UTF-32, and variable number of bytes for UTF-16). For UTF-8, the detection is fine but the language is not detected, it could be implemented the same way.
 
