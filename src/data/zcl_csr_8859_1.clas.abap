@@ -1,4 +1,4 @@
-"! <p class="shorttext synchronized" lang="en">Languages for ISO-8859-1</p>
+"! <p class="shorttext synchronized" lang="en"></p>
 "!
 CLASS zcl_csr_8859_1 DEFINITION
   PUBLIC
@@ -7,8 +7,6 @@ CLASS zcl_csr_8859_1 DEFINITION
   CREATE PUBLIC .
 
   PUBLIC SECTION.
-
-    DATA charmap_8859_1 TYPE ty_charmap_sbcs .
 
     METHODS constructor .
 
@@ -20,7 +18,7 @@ ENDCLASS.
 
 
 
-CLASS zcl_csr_8859_1 IMPLEMENTATION.
+CLASS ZCL_CSR_8859_1 IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -60,7 +58,6 @@ CLASS zcl_csr_8859_1 IMPLEMENTATION.
     'F0F1F2F3F4F5F620'
     'F8F9FAFBFCFDFEFF'
     INTO charmap.
-*    INTO charmap_8859_1.
 
   ENDMETHOD.
 

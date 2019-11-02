@@ -8,8 +8,6 @@ CLASS zcl_csr_8859_9 DEFINITION
 
   PUBLIC SECTION.
 
-*    DATA charmap_8859_9 TYPE ty_charmap_sbcs .
-
     METHODS constructor .
 
     METHODS get_name
@@ -60,7 +58,6 @@ CLASS zcl_csr_8859_9 IMPLEMENTATION.
     'F0F1F2F3F4F5F620'
     'F8F9FAFBFCFDFEFF'
     INTO charmap.
-*    INTO charmap_8859_9.
 
   ENDMETHOD.
 
@@ -74,4 +71,6 @@ CLASS zcl_csr_8859_9 IMPLEMENTATION.
     ENDIF.
 
   ENDMETHOD.
+
+
 ENDCLASS.

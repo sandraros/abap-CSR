@@ -11,15 +11,14 @@ CLASS zcl_csr_detector DEFINITION
         text_in    TYPE REF TO zcl_csr_input_text,
         csr        TYPE REF TO zcl_csr_super,
         confidence TYPE i,
-      END OF ty_charset_match .
-    TYPES:
-      ty_charset_matches TYPE STANDARD TABLE OF ty_charset_match WITH DEFAULT KEY .
+      END OF ty_charset_match,
+      ty_charset_matches TYPE STANDARD TABLE OF ty_charset_match WITH DEFAULT KEY,
+      ty_csrecognizers TYPE STANDARD TABLE OF REF TO zcl_csr_super WITH DEFAULT KEY.
 
-    DATA f_fresh_text_set TYPE abap_bool .
-    DATA text_in TYPE REF TO zcl_csr_input_text .
-    DATA:
-      csrecognizers    TYPE TABLE OF REF TO zcl_csr_super .
-    DATA f_strip_tags TYPE abap_bool VALUE abap_false ##NO_TEXT.
+    DATA: f_fresh_text_set TYPE abap_bool,
+    text_in TYPE REF TO zcl_csr_input_text,
+    csrecognizers    TYPE ty_csrecognizers,
+    f_strip_tags TYPE abap_bool VALUE abap_false ##NO_TEXT.
 
     METHODS set_recognizers .
     METHODS constructor .
@@ -186,56 +185,58 @@ CLASS zcl_csr_detector IMPLEMENTATION.
 
   METHOD set_recognizers.
 
-    DATA csr TYPE REF TO zcl_csr_super.
-    DEFINE mnew.
-      CREATE OBJECT csr TYPE &1.
-      APPEND csr TO csrecognizers.
-    END-OF-DEFINITION.
-    mnew :
-            zcl_csr_utf8,
-            zcl_csr_utf_16_be,
-            zcl_csr_utf_16_le,
-*            zcl_csr_utf_32_be,
-*            zcl_csr_utf_32_le,
+    csrecognizers = value #(
+        ( NEW zcl_csr_utf8( ) )
+        ( NEW zcl_csr_utf_16_be( ) )
+        ( NEW zcl_csr_utf_16_le( ) )
+        ( NEW zcl_csr_utf_32_be( ) )
+        ( NEW zcl_csr_utf_32_le( ) )
 
-            zcl_csr_8859_1_en,
-            zcl_csr_8859_1_da,
-            zcl_csr_8859_1_de,
-            zcl_csr_8859_1_es,
-            zcl_csr_8859_1_fr,
-            zcl_csr_8859_1_it,
-            zcl_csr_8859_1_nl,
-            zcl_csr_8859_1_no,
-            zcl_csr_8859_1_pt,
-            zcl_csr_8859_1_sv,
-            zcl_csr_8859_2_cs,
-            zcl_csr_8859_2_hu,
-            zcl_csr_8859_2_pl,
-            zcl_csr_8859_2_ro,
-            zcl_csr_8859_5_ru,
-            zcl_csr_8859_6_ar,
-            zcl_csr_8859_7_el,
-            zcl_csr_8859_8_i_he,
-            zcl_csr_8859_8_he,
-            zcl_csr_windows_1251,
-            zcl_csr_windows_1256,
-            zcl_csr_koi8_r,
-            zcl_csr_8859_9_tr,
-*            zcl_csr_sjis,
-*            zcl_csr_gb_18030,
-*            zcl_csr_euc_jp,
-*            zcl_csr_euc_kr,
-*            zcl_csr_big5,
+        ( NEW zcl_csr_8859_1_en( ) )
+        ( NEW zcl_csr_8859_1_da( ) )
+        ( NEW zcl_csr_8859_1_de( ) )
+        ( NEW zcl_csr_8859_1_es( ) )
+        ( NEW zcl_csr_8859_1_fr( ) )
+        ( NEW zcl_csr_8859_1_it( ) )
+        ( NEW zcl_csr_8859_1_nl( ) )
+        ( NEW zcl_csr_8859_1_no( ) )
+        ( NEW zcl_csr_8859_1_pt( ) )
+        ( NEW zcl_csr_8859_1_sv( ) )
+        ( NEW zcl_csr_8859_2_cs( ) )
+        ( NEW zcl_csr_8859_2_hu( ) )
+        ( NEW zcl_csr_8859_2_pl( ) )
+        ( NEW zcl_csr_8859_2_ro( ) )
+        ( NEW zcl_csr_8859_5_ru( ) )
+        ( NEW zcl_csr_8859_6_ar( ) )
+        ( NEW zcl_csr_8859_7_el( ) )
+        ( NEW zcl_csr_8859_8_i_he( ) )
+        ( NEW zcl_csr_8859_8_he( ) )
+        ( NEW zcl_csr_8859_9_tr( ) )
+        ( NEW zcl_csr_windows_1251( ) )
+        ( NEW zcl_csr_windows_1256( ) )
+        ( NEW zcl_csr_koi8_r( ) )
+        ( NEW zcl_csr_ibm424_he_rtl( ) )
+        ( NEW zcl_csr_ibm424_he_ltr( ) )
+        ( NEW zcl_csr_ibm420_ar_rtl( ) )
+        ( NEW zcl_csr_ibm420_ar_ltr( ) ) ).
 
-*            zcl_csr_2022jp,
-*            zcl_csr_2022kr,
-*            zcl_csr_2022cn,
+*        ( NEW zcl_csr_sjis( ) )
+*        ( NEW zcl_csr_gb_18030( ) )
+*        ( NEW zcl_csr_euc_jp( ) )
+*        ( NEW zcl_csr_euc_kr( ) )
+*        ( NEW zcl_csr_big5( ) )
 
-            zcl_csr_ibm424_he_rtl,
-            zcl_csr_ibm424_he_ltr,
-            zcl_csr_ibm420_ar_rtl,
-            zcl_csr_ibm420_ar_ltr.
-    "APPEND csr TO csrecognizers. WHAT FOR?
+*        ( NEW zcl_csr_2022jp( ) )
+*        ( NEW zcl_csr_2022kr( ) )
+*        ( NEW zcl_csr_2022cn( ) )
+
+*loop at csrecognizers into data(csr).
+*if csr is instance of zcl_csr_sbcs.
+*data(csr_utf_16_be) = zcl_csr_utf_16=>create_csr_from_sbcs( csr_sbcs = csr_sbcs be = abap_true ).
+*data(csr_utf_16_le) = zcl_csr_utf_16=>create_csr_from_sbcs( csr_sbcs = csr_sbcs be = abap_false ).
+*APPEND NEW zcl_csr_utf16( csr2 ) TO csrecognizers.
+*endif.
+*endloop.
 
   ENDMETHOD.
 

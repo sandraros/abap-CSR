@@ -107,9 +107,9 @@ CLASS zcl_csr_input_text IMPLEMENTATION.
       APPEND 0 TO byte_stats.
     ENDDO.
     i = 0.
-    WHILE i <= xstrlen( f_raw_input ).
+    WHILE i < xstrlen( f_raw_input ).
       b = f_raw_input+i.
-      READ TABLE byte_stats INDEX b ASSIGNING FIELD-SYMBOL(<stat>).
+      READ TABLE byte_stats INDEX b + 1 ASSIGNING FIELD-SYMBOL(<stat>).
       ADD 1 TO <stat>.
       ADD 1 TO i.
     ENDWHILE.

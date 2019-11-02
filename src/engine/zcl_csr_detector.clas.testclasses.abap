@@ -14,6 +14,8 @@ CLASS ltc_aunit DEFINITION
     METHODS test_utf8 FOR TESTING.
     METHODS test_utf_16_be FOR TESTING.
     METHODS test_utf_16_le FOR TESTING.
+    METHODS test_utf_32_be FOR TESTING.
+    METHODS test_utf_32_le FOR TESTING.
     METHODS test_8859_1_da FOR TESTING.
     METHODS test_8859_1_de FOR TESTING.
     METHODS test_8859_1_en FOR TESTING.
@@ -36,10 +38,10 @@ CLASS ltc_aunit DEFINITION
     METHODS test_windows_1251 FOR TESTING.
     METHODS test_windows_1256 FOR TESTING.
     METHODS test_koi8_r FOR TESTING.
-*    METHODS test_ibm424_he_rtl FOR TESTING.
-*    METHODS test_ibm424_he_ltr FOR TESTING.
-*    METHODS test_ibm420_ar_rtl FOR TESTING.
-*    METHODS test_ibm420_ar_ltr FOR TESTING.
+    METHODS test_ibm424_he_rtl FOR TESTING.
+    METHODS test_ibm424_he_ltr FOR TESTING.
+    METHODS test_ibm420_ar_rtl FOR TESTING.
+    METHODS test_ibm420_ar_ltr FOR TESTING.
 
     METHODS setup .
 
@@ -84,9 +86,8 @@ CLASS ltc_aunit IMPLEMENTATION.
         source   = 'once upon a time there was a true story'
         codepage = 'iso-8859-1' ) ).
     result = csr_det->detect( ).
-    cl_abap_unit_assert=>assert_equals(
-        exp = abap_true
-        act = xsdbool( result-csr->get_language( ) = 'en' AND result-csr->get_name( ) = 'ISO-8859-1' ) ).
+    cl_abap_unit_assert=>assert_equals( exp = 'en' act = result-csr->get_language( ) ).
+    cl_abap_unit_assert=>assert_equals( exp = 'ISO-8859-1' act = result-csr->get_name( ) ).
 
   ENDMETHOD.
 
@@ -98,9 +99,8 @@ CLASS ltc_aunit IMPLEMENTATION.
         source   = 'il était une fois une histoire véridique'
         codepage = 'iso-8859-1' ) ).
     result = csr_det->detect( ).
-    cl_abap_unit_assert=>assert_equals(
-        exp = abap_true
-        act = xsdbool( result-csr->get_language( ) = 'fr' AND result-csr->get_name( ) = 'ISO-8859-1' ) ).
+    cl_abap_unit_assert=>assert_equals( exp = 'fr' act = result-csr->get_language( ) ).
+    cl_abap_unit_assert=>assert_equals( exp = 'ISO-8859-1' act = result-csr->get_name( ) ).
 
   ENDMETHOD.
 
@@ -112,9 +112,8 @@ CLASS ltc_aunit IMPLEMENTATION.
         source   = 'c''era una volta una storia vera che non era conosciuta dalla gente'
         codepage = 'iso-8859-1' ) ).
     result = csr_det->detect( ).
-    cl_abap_unit_assert=>assert_equals(
-        exp = abap_true
-        act = xsdbool( result-csr->get_language( ) = 'it' AND result-csr->get_name( ) = 'ISO-8859-1' ) ).
+    cl_abap_unit_assert=>assert_equals( exp = 'it' act = result-csr->get_language( ) ).
+    cl_abap_unit_assert=>assert_equals( exp = 'ISO-8859-1' act = result-csr->get_name( ) ).
 
   ENDMETHOD.
 
@@ -127,9 +126,8 @@ CLASS ltc_aunit IMPLEMENTATION.
         source   = 'en gång i tiden var det en sann historia som inte var känd av folket'
         codepage = 'iso-8859-1' ) ).
     result = csr_det->detect( ).
-    cl_abap_unit_assert=>assert_equals(
-        exp = abap_true
-        act = xsdbool( result-csr->get_language( ) = 'sv' AND result-csr->get_name( ) = 'ISO-8859-1' ) ).
+    cl_abap_unit_assert=>assert_equals( exp = 'sv' act = result-csr->get_language( ) ).
+    cl_abap_unit_assert=>assert_equals( exp = 'ISO-8859-1' act = result-csr->get_name( ) ).
 
   ENDMETHOD.
 
@@ -140,35 +138,56 @@ CLASS ltc_aunit IMPLEMENTATION.
         source   = 'il était une fois une histoire véridique'
         codepage = 'UTF-8' ) ).
     result = csr_det->detect( ).
-    cl_abap_unit_assert=>assert_equals(
-        exp = abap_true
-        act = xsdbool( result-csr->get_language( ) = '' AND result-csr->get_name( ) = 'UTF-8' ) ).
+    cl_abap_unit_assert=>assert_equals( exp = '' act = result-csr->get_language( ) ).
+    cl_abap_unit_assert=>assert_equals( exp = 'UTF-8' act = result-csr->get_name( ) ).
 
   ENDMETHOD.
 
   METHOD test_utf_16_be.
 
+    " Currently, UTF-16 is detected only via the BOM (unfortunately)
     csr_det->set_text( in = cl_bcs_convert=>string_to_xstring(
-          iv_string     = 'il était une fois une histoire véridique'
-          iv_codepage   = '4102' " UTF-16BE
-          iv_add_bom    = abap_true ) ).
+          iv_string   = 'il était une fois une histoire véridique'
+          iv_codepage = '4102' " UTF-16BE
+          iv_add_bom  = abap_true ) ).
     result = csr_det->detect( ).
-    cl_abap_unit_assert=>assert_equals(
-        exp = abap_true
-        act = xsdbool( result-csr->get_language( ) = '' AND result-csr->get_name( ) = 'UTF-16BE' ) ).
+    cl_abap_unit_assert=>assert_equals( exp = '' act = result-csr->get_language( ) ).
+    cl_abap_unit_assert=>assert_equals( exp = 'UTF-16BE' act = result-csr->get_name( ) ).
 
   ENDMETHOD.
 
   METHOD test_utf_16_le.
 
+    " Currently, UTF-16 is detected only via the BOM (unfortunately)
     csr_det->set_text( in = cl_bcs_convert=>string_to_xstring(
-          iv_string     = 'il était une fois une histoire véridique'
-          iv_codepage   = '4103' " UTF-16LE
-          iv_add_bom    = abap_true ) ).
+          iv_string   = 'il était une fois une histoire véridique'
+          iv_codepage = '4103' " UTF-16LE
+          iv_add_bom  = abap_true ) ).
     result = csr_det->detect( ).
-    cl_abap_unit_assert=>assert_equals(
-        exp = abap_true
-        act = xsdbool( result-csr->get_language( ) = '' AND result-csr->get_name( ) = 'UTF-16LE' ) ).
+    cl_abap_unit_assert=>assert_equals( exp = '' act = result-csr->get_language( ) ).
+    cl_abap_unit_assert=>assert_equals( exp = 'UTF-16LE' act = result-csr->get_name( ) ).
+
+  ENDMETHOD.
+
+  METHOD test_utf_32_be.
+
+    csr_det->set_text( cl_bcs_convert=>string_to_xstring(
+          iv_string   = 'il était une fois une histoire véridique'
+          iv_codepage = '4104' ) ). " UTF-32BE
+    result = csr_det->detect( ).
+    cl_abap_unit_assert=>assert_equals( exp = '' act = result-csr->get_language( ) ).
+    cl_abap_unit_assert=>assert_equals( exp = 'UTF-32BE' act = result-csr->get_name( ) ).
+
+  ENDMETHOD.
+
+  METHOD test_utf_32_le.
+
+    csr_det->set_text( cl_bcs_convert=>string_to_xstring(
+        iv_string   = 'il était une fois une histoire véridique'
+        iv_codepage = '4105' ) ). " UTF-32LE
+    result = csr_det->detect( ).
+    cl_abap_unit_assert=>assert_equals( exp = '' act = result-csr->get_language( ) ).
+    cl_abap_unit_assert=>assert_equals( exp = 'UTF-32LE' act = result-csr->get_name( ) ).
 
   ENDMETHOD.
 
@@ -180,9 +199,8 @@ CLASS ltc_aunit IMPLEMENTATION.
         source   = 'Es war einmal eine wahre Geschichte, die das Volk nicht kannte'
         codepage = 'iso-8859-1' ) ).
     result = csr_det->detect( ).
-    cl_abap_unit_assert=>assert_equals(
-        exp = abap_true
-        act = xsdbool( result-csr->get_language( ) = 'de' AND result-csr->get_name( ) = 'ISO-8859-1' ) ).
+    cl_abap_unit_assert=>assert_equals( exp = 'de' act = result-csr->get_language( ) ).
+    cl_abap_unit_assert=>assert_equals( exp = 'ISO-8859-1' act = result-csr->get_name( ) ).
 
   ENDMETHOD.
 
@@ -194,9 +212,8 @@ CLASS ltc_aunit IMPLEMENTATION.
         source   = 'Había una vez una historia real que la gente no conocía'
         codepage = 'iso-8859-1' ) ).
     result = csr_det->detect( ).
-    cl_abap_unit_assert=>assert_equals(
-        exp = abap_true
-        act = xsdbool( result-csr->get_language( ) = 'es' AND result-csr->get_name( ) = 'ISO-8859-1' ) ).
+    cl_abap_unit_assert=>assert_equals( exp = 'es' act = result-csr->get_language( ) ).
+    cl_abap_unit_assert=>assert_equals( exp = 'ISO-8859-1' act = result-csr->get_name( ) ).
 
   ENDMETHOD.
 
@@ -400,6 +417,55 @@ CLASS ltc_aunit IMPLEMENTATION.
       cl_abap_unit_assert=>assert_equals( exp = <exp_result>-language   act = <result>-csr->get_language( ) ).
       cl_abap_unit_assert=>assert_equals( exp = <exp_result>-charset    act = <result>-csr->get_name( ) ).
     ENDLOOP.
+
+  ENDMETHOD.
+
+  METHOD test_ibm424_he_ltr.
+
+    " HEBREW
+    " once upon a time there was a true story which was not known by the people
+    " NB: code page ibm424/ebcdic424 is not supplied by SAP.
+    csr_det->set_text( '59516958414540515251405462406246525140455145404154694051485156414052466451594045514540596264' ).
+    result = csr_det->detect( ).
+    cl_abap_unit_assert=>assert_equals( exp = 'he' act = result-csr->get_language( ) ).
+    cl_abap_unit_assert=>assert_equals( exp = 'IBM424_ltr' act = result-csr->get_name( ) ).
+
+  ENDMETHOD.
+
+  METHOD test_ibm424_he_rtl.
+
+    " HEBREW
+    " once upon a time there was a true story which was not known by the people
+    " NB: code page ibm424/ebcdic424 is not supplied by SAP.
+    csr_det->set_text( '64625940455145405951644652404156514851406954414045514540515246624062544051525140454158695159' ).
+    result = csr_det->detect( ).
+    cl_abap_unit_assert=>assert_equals( exp = 'he' act = result-csr->get_language( ) ).
+    cl_abap_unit_assert=>assert_equals( exp = 'IBM424_rtl' act = result-csr->get_name( ) ).
+
+  ENDMETHOD.
+
+  METHOD test_ibm420_ar_ltr.
+
+    " ARABIC
+    " once upon a time there was a true story which was not known by the people
+    " NB: code page ibm420/ebcdic420 is not supplied by SAP.
+    csr_det->set_text( '775774BA564057CDAC40759DDE40BBBA4062DEAEDEAE7040628CAE40B05774CB40637457B0406275BC40635674' ).
+    result = csr_det->detect( ).
+    cl_abap_unit_assert=>assert_equals( exp = 'ar' act = result-csr->get_language( ) ).
+    cl_abap_unit_assert=>assert_equals( exp = 'IBM420_ltr' act = result-csr->get_name( ) ).
+
+  ENDMETHOD.
+
+  METHOD test_ibm420_ar_rtl.
+
+    " ARABIC
+    " once upon a time there was a true story which was not known by the people
+    " NB: code page ibm420/ebcdic420 is not supplied by SAP.
+    csr_det->set_text( '74566340BC756240B057746340CB7457B040AE8C624070AEDEAEDE6240BABB40DE9D7540ACCD574056BA745777' ).
+    result = csr_det->detect( ).
+    cl_abap_unit_assert=>assert_equals( exp = 'ar' act = result-csr->get_language( ) ).
+    cl_abap_unit_assert=>assert_equals( exp = 'IBM420_rtl' act = result-csr->get_name( ) ).
+
   ENDMETHOD.
 
 ENDCLASS.

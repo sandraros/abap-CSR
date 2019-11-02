@@ -7,13 +7,9 @@ CLASS zcl_csr_8859_1_sv DEFINITION
 
   PUBLIC SECTION.
 
-*    DATA ngrams_8859_1_sv TYPE ty_ngrams_sbcs .
-
     METHODS constructor .
 
     METHODS get_language
-        REDEFINITION .
-    METHODS match
         REDEFINITION .
   PROTECTED SECTION.
   PRIVATE SECTION.
@@ -33,7 +29,6 @@ CLASS zcl_csr_8859_1_sv IMPLEMENTATION.
     '65742066F67267656E696C6C696E676B61206C6C206D65646E20736E61206E64656E67206E67656E696E6F63686F6D20'
     '6F6E2070E520722061722073726120736B61736F6D74207374612074652074657274696C747420766172E47220F67220'
     INTO ngrams.
-*    INTO ngrams_8859_1_sv.
 
   ENDMETHOD.
 
@@ -45,13 +40,4 @@ CLASS zcl_csr_8859_1_sv IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD match.
-
-    result = match_sbcs( det ).
-*        det        = det
-*        ngrams     = ngrams_8859_1_sv
-*        charmap    = charmap_8859_1
-*    ).
-
-  ENDMETHOD.
 ENDCLASS.

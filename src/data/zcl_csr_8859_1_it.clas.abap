@@ -1,28 +1,26 @@
-class ZCL_CSR_8859_1_IT definition
-  public
-  inheriting from ZCL_CSR_8859_1
-  create public .
+"! <p class="shorttext synchronized" lang="en">Italian</p>
+"!
+CLASS zcl_csr_8859_1_it DEFINITION
+  PUBLIC
+  INHERITING FROM zcl_csr_8859_1
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-*  data NGRAMS_8859_1_IT type TY_NGRAMS_SBCS .
+    METHODS constructor .
 
-  methods CONSTRUCTOR .
-
-  methods GET_LANGUAGE
-    redefinition .
-  methods MATCH
-    redefinition .
-protected section.
-private section.
+    METHODS get_language
+        REDEFINITION .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
 ENDCLASS.
 
 
 
-CLASS ZCL_CSR_8859_1_IT IMPLEMENTATION.
+CLASS zcl_csr_8859_1_it IMPLEMENTATION.
 
 
-  method CONSTRUCTOR.
+  METHOD constructor.
 
     super->constructor( ).
     CONCATENATE
@@ -31,25 +29,15 @@ CLASS ZCL_CSR_8859_1_IT IMPLEMENTATION.
     '686520692061692063692064692073696120696C20696E20696F6E6C61206C65206C69206C6C616E65206E69206E6F20'
     '6E74656F20616F20646F20696F20736F6E206F6E65706572726120726520736920746120746520746920746F207A696F'
     INTO ngrams.
-*    INTO ngrams_8859_1_it.
 
-  endmethod.
+  ENDMETHOD.
 
 
-  method GET_LANGUAGE.
+  METHOD get_language.
 
     language = 'it'.
 
-  endmethod.
+  ENDMETHOD.
 
 
-  method MATCH.
-
-    result = match_sbcs( det ).
-*        det        = det
-*        ngrams     = ngrams_8859_1_it
-*        charmap    = charmap_8859_1
-*    ).
-
-  endmethod.
 ENDCLASS.

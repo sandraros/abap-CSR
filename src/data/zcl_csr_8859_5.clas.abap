@@ -8,8 +8,6 @@ CLASS zcl_csr_8859_5 DEFINITION
 
   PUBLIC SECTION.
 
-*    DATA charmap_8859_5 TYPE ty_charmap_sbcs .
-
     METHODS constructor .
 
     METHODS get_name
@@ -60,7 +58,6 @@ CLASS zcl_csr_8859_5 IMPLEMENTATION.
     '20F1F2F3F4F5F6F7'
     'F8F9FAFBFC20FEFF'
     INTO charmap.
-*    INTO charmap_8859_5.
 
   ENDMETHOD.
 
@@ -70,4 +67,6 @@ CLASS zcl_csr_8859_5 IMPLEMENTATION.
     name = 'ISO-8859-5'.
 
   ENDMETHOD.
+
+
 ENDCLASS.

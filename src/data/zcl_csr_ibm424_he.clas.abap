@@ -8,8 +8,6 @@ CLASS zcl_csr_ibm424_he DEFINITION
 
   PUBLIC SECTION.
 
-*    DATA charmap_ibm424_he TYPE ty_charmap_sbcs .
-
     METHODS constructor .
 
     METHODS get_language
@@ -20,7 +18,7 @@ ENDCLASS.
 
 
 
-CLASS zcl_csr_ibm424_he IMPLEMENTATION.
+CLASS ZCL_CSR_IBM424_HE IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -44,7 +42,6 @@ CLASS zcl_csr_ibm424_he IMPLEMENTATION.
     '4040A2A3A4A5A6A7A8A9404040404040'
     '40404040404040404040404040404040'
     INTO charmap.
-*    INTO charmap_ibm424_he.
 
   ENDMETHOD.
 
