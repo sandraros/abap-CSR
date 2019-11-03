@@ -19,7 +19,7 @@ UTF detection is fine but the language is not detected at all. UTF-16 is only de
 
 ## ADDITIONS TO ICU
 
-Only Single-Byte Character Sets are implemented (ISO-8859-x, Windows-1251, Windows-1256). Remaining work: MBCS and ISO-2022-* (CJK).
+Only Single-Byte Character Sets and Unicode are implemented (see the [supported combinations of character sets and languages](https://github.com/sandraros/abap-CSR/blob/master/List%20of%20supported%20character%20sets%20and%20languages.md)). Remaining work: MBCS and ISO-2022-* (CJK).
 
 The language is detected in UTF-16 through an algorithm added specifically (class ZCL_CSR_UTF_16_SBCS).
 
