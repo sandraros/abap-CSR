@@ -9,7 +9,7 @@ It should not be used productively because the result can be incorrect. A human 
 
 ## CREDITS
 
-This is a porting of the Character Set Detection C++ program provided in the ICU library (http://userguide.icu-project.org/conversion/detection). The concerned files in the directory `\source\i18n` are: `csdetect.cpp`, `csmatch.cpp`, `csr2022.cpp`, `csrecog.cpp`, `csrmbcs.cpp`, `csrsbcs.cpp`, `csrucode.cpp`, `csrutf8.cpp`.
+The program is mainly a porting of the Character Set Detection C++ program provided in the ICU library (http://userguide.icu-project.org/conversion/detection), and it has a few additions. The concerned files in the ICU directory `\source\i18n` are: `csdetect.cpp`, `csmatch.cpp`, `csr2022.cpp`, `csrecog.cpp`, `csrmbcs.cpp`, `csrsbcs.cpp`, `csrucode.cpp`, `csrutf8.cpp`.
 
 ## RESTRICTIONS
 
