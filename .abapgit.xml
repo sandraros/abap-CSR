@@ -14,6 +14,7 @@
     <item>/.gitlab-ci.yml</item>
     <item>/abaplint.json</item>
     <item>/azure-pipelines.yml</item>
+    <item>/List of supported character sets and languages.md</item>
    </IGNORE>
   </DATA>
  </asx:values>
