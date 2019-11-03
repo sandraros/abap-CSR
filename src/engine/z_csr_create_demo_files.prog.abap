@@ -6,20 +6,29 @@
 REPORT z_csr_create_demo_files.
 
 CLASS lcl_app DEFINITION.
+
   PUBLIC SECTION.
+
     METHODS constructor
       IMPORTING
-        p_file TYPE string.
+        p_file TYPE string
+        p_fe   TYPE abap_bool
+        p_as   TYPE abap_bool.
+
     METHODS main.
+
   PRIVATE SECTION.
 
-    DATA p_file TYPE string.
-    METHODS utf.
+    DATA: p_file TYPE string,
+          p_fe   TYPE abap_bool,
+          p_as   TYPE abap_bool.
 
     METHODS download
       IMPORTING
         name    TYPE csequence
         content TYPE xstring.
+
+    METHODS utf.
     METHODS iso_8859_1.
     METHODS iso_8859_2.
     METHODS iso_8859_others.
@@ -32,6 +41,8 @@ CLASS lcl_app IMPLEMENTATION.
   METHOD constructor.
 
     me->p_file = p_file.
+    me->p_fe = p_fe.
+    me->p_as = p_as.
 
   ENDMETHOD.
 
@@ -186,29 +197,73 @@ CLASS lcl_app IMPLEMENTATION.
 
   METHOD download.
 
-    DATA lt_xstring TYPE TABLE OF x255.
-    DATA l_length TYPE i.
-    DATA l_filename TYPE string.
+    DATA: table_of_bytes TYPE TABLE OF x255,
+          length         TYPE i,
+          filename       TYPE string.
 
-    CALL METHOD cl_swf_utl_convert_xstring=>xstring_to_table
-      EXPORTING
-        i_stream = content
-      IMPORTING
-        e_table  = lt_xstring
-      EXCEPTIONS
-        OTHERS   = 3.
-    l_length = xstrlen( content ).
+    filename = replace( val = p_file sub = '&1' with = name ).
 
-    l_filename = replace( val = p_file sub = '&1' with = name ).
-    CALL METHOD cl_gui_frontend_services=>gui_download
-      EXPORTING
-        bin_filesize = l_length
-        filename     = l_filename
-        filetype     = 'BIN'
-      CHANGING
-        data_tab     = lt_xstring
-      EXCEPTIONS
-        OTHERS       = 3.
+    CASE 'X'.
+
+      WHEN p_fe.
+
+        "===================
+        " FRONTEND
+        "===================
+
+        CALL METHOD cl_swf_utl_convert_xstring=>xstring_to_table
+          EXPORTING
+            i_stream = content
+          IMPORTING
+            e_table  = table_of_bytes
+          EXCEPTIONS
+            OTHERS   = 3.
+        length = xstrlen( content ).
+
+        CALL METHOD cl_gui_frontend_services=>gui_download
+          EXPORTING
+            bin_filesize = length
+            filename     = filename
+            filetype     = 'BIN'
+          CHANGING
+            data_tab     = table_of_bytes
+          EXCEPTIONS
+            OTHERS       = 3.
+
+        IF sy-subrc <> 0.
+          MESSAGE 'File system error'(002) TYPE 'I' DISPLAY LIKE 'E'.
+          RETURN.
+        ENDIF.
+
+      WHEN p_as.
+
+        "===================
+        " APPLICATION SERVER
+        "===================
+
+        TRY.
+            OPEN DATASET filename IN BINARY MODE FOR OUTPUT.
+          CATCH cx_root.
+            MESSAGE 'File system error'(002) TYPE 'I' DISPLAY LIKE 'E'.
+            RETURN.
+        ENDTRY.
+        IF sy-subrc <> 0.
+          MESSAGE 'File cannot be opened'(001) TYPE 'I' DISPLAY LIKE 'E'.
+          RETURN.
+        ELSE.
+          TRY.
+              TRANSFER content TO filename.
+            CATCH cx_root ##NO_HANDLER.
+              MESSAGE 'File system error'(002) TYPE 'I' DISPLAY LIKE 'E'.
+              RETURN.
+          ENDTRY.
+          TRY.
+              CLOSE DATASET filename.
+            CATCH cx_root ##NO_HANDLER.
+          ENDTRY.
+        ENDIF.
+
+    ENDCASE.
 
   ENDMETHOD.
 
@@ -216,6 +271,8 @@ CLASS lcl_app IMPLEMENTATION.
 ENDCLASS.
 
 PARAMETERS p_file TYPE string LOWER CASE DEFAULT '\path\&1.txt'.
+PARAMETERS p_fe RADIOBUTTON GROUP rb1 DEFAULT 'X'.
+PARAMETERS p_as RADIOBUTTON GROUP rb1.
 
 START-OF-SELECTION.
-  NEW lcl_app( p_file )->main( ).
+  NEW lcl_app( p_file = p_file p_fe = p_fe p_as = p_as )->main( ).

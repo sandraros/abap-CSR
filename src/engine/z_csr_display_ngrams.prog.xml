@@ -5,6 +5,7 @@
    <PROGDIR>
     <NAME>Z_CSR_DISPLAY_NGRAMS</NAME>
     <DBAPL>S</DBAPL>
+    <DBNA>D$</DBNA>
     <SUBC>1</SUBC>
     <FIXPT>X</FIXPT>
     <LDBNAME>D$S</LDBNAME>
@@ -13,8 +14,8 @@
    <TPOOL>
     <item>
      <ID>R</ID>
-     <ENTRY>Display maps</ENTRY>
-     <LENGTH>12</LENGTH>
+     <ENTRY>Display N-Grams</ENTRY>
+     <LENGTH>15</LENGTH>
     </item>
    </TPOOL>
   </asx:values>

@@ -6,7 +6,7 @@
 REPORT z_csr_display_ngrams.
 
 DATA laiso TYPE laiso.
-SELECT-OPTIONS s_langu FOR laiso LOWER CASE.
+SELECT-OPTIONS s_langu FOR laiso.
 
 START-OF-SELECTION.
   DATA csr_det TYPE REF TO zcl_csr_detector.
@@ -20,7 +20,8 @@ START-OF-SELECTION.
     CASE TYPE OF csr.
       WHEN TYPE zcl_csr_sbcs.
         DATA(csr_sbcs) = CAST zcl_csr_sbcs( csr ).
-        IF csr_sbcs->get_language( ) IN s_langu.
+        DATA(csr_sbcs_language) = to_upper( csr_sbcs->get_language( ) ).
+        IF csr_sbcs_language IN s_langu.
           PERFORM sbcs USING csr_sbcs.
         ENDIF.
     ENDCASE.

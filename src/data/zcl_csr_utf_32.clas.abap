@@ -16,6 +16,8 @@ CLASS zcl_csr_utf_32 DEFINITION
         REDEFINITION .
   PROTECTED SECTION.
     TYPES ty_utf32_char TYPE x LENGTH 4.
+
+    "! Returns the 4 bytes of a character in UTF-32 BigEndian format (from 00000000 to 0010FFFF).
     METHODS get_char ABSTRACT
       IMPORTING
         det         TYPE REF TO zcl_csr_input_text
@@ -50,16 +52,17 @@ CLASS zcl_csr_utf_32 IMPLEMENTATION.
     ENDIF.
 
     DATA(has_bom) = abap_false.
+    DATA(i) = 0.
     IF get_char( det = det offset = 0 ) = '0000FEFF'.
       has_bom = abap_true.
+      i = 4.
     ENDIF.
 
-    DATA(i) = 4.
     DATA(num_invalid) = 0.
     DATA(num_valid) = 0.
     WHILE i < xstrlen( det->f_raw_input ).
       DATA(ch) = get_char( det = det offset = i ).
-      IF ch < 0 OR ch > '0010FFFF' OR ch BETWEEN '0000D800' AND '0000DFFF'.
+      IF ch > '0010FFFF' OR ch BETWEEN '0000D800' AND '0000DFFF'.
         ADD 1 TO num_invalid.
       ELSE.
         ADD 1 TO num_valid.
@@ -76,7 +79,7 @@ CLASS zcl_csr_utf_32 IMPLEMENTATION.
     ELSEIF num_valid > 0 AND num_invalid = 0.
       result = 80.
     ELSEIF num_valid > num_invalid * 10.
-      " Probably corruput UTF-32BE data.  Valid sequences aren't likely by chance.
+      " Probably corrupted UTF-32BE data.  Valid sequences aren't likely by chance.
       result = 25.
     ELSE.
       result = 0.
