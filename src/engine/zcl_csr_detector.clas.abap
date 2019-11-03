@@ -13,14 +13,15 @@ CLASS zcl_csr_detector DEFINITION
         confidence TYPE i,
       END OF ty_charset_match,
       ty_charset_matches TYPE STANDARD TABLE OF ty_charset_match WITH DEFAULT KEY,
-      ty_csrecognizers TYPE STANDARD TABLE OF REF TO zcl_csr_super WITH DEFAULT KEY.
+      ty_csrecognizers   TYPE STANDARD TABLE OF REF TO zcl_csr_super WITH DEFAULT KEY.
 
+    CLASS-DATA: csrecognizers TYPE ty_csrecognizers.
     DATA: f_fresh_text_set TYPE abap_bool,
-    text_in TYPE REF TO zcl_csr_input_text,
-    csrecognizers    TYPE ty_csrecognizers,
-    f_strip_tags TYPE abap_bool VALUE abap_false ##NO_TEXT.
+          text_in          TYPE REF TO zcl_csr_input_text,
+          f_strip_tags     TYPE abap_bool VALUE abap_false ##NO_TEXT.
 
-    METHODS set_recognizers .
+    CLASS-METHODS class_constructor.
+*    METHODS set_recognizers .
     METHODS constructor .
     METHODS set_text
       IMPORTING
@@ -36,11 +37,13 @@ CLASS zcl_csr_detector DEFINITION
       RETURNING
         VALUE(results) TYPE ty_charset_matches .
     METHODS get_charset_name .
+
     CLASS-METHODS get_sap_language
       IMPORTING
         !iso_code           TYPE laiso
       RETURNING
         VALUE(sap_language) TYPE sylangu .
+
   PROTECTED SECTION.
   PRIVATE SECTION.
 ENDCLASS.
@@ -52,7 +55,7 @@ CLASS zcl_csr_detector IMPLEMENTATION.
 
   METHOD constructor.
 
-    set_recognizers( ).
+*    set_recognizers( ).
     CREATE OBJECT text_in.
 
   ENDMETHOD.
@@ -183,9 +186,9 @@ CLASS zcl_csr_detector IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD set_recognizers.
+  METHOD class_constructor."set_recognizers.
 
-    csrecognizers = value #(
+    csrecognizers = VALUE #(
         ( NEW zcl_csr_utf8( ) )
         ( NEW zcl_csr_utf_16_be( ) )
         ( NEW zcl_csr_utf_16_le( ) )
@@ -225,18 +228,19 @@ CLASS zcl_csr_detector IMPLEMENTATION.
 *        ( NEW zcl_csr_euc_jp( ) )
 *        ( NEW zcl_csr_euc_kr( ) )
 *        ( NEW zcl_csr_big5( ) )
-
 *        ( NEW zcl_csr_2022jp( ) )
 *        ( NEW zcl_csr_2022kr( ) )
 *        ( NEW zcl_csr_2022cn( ) )
 
-*loop at csrecognizers into data(csr).
-*if csr is instance of zcl_csr_sbcs.
-*data(csr_utf_16_be) = zcl_csr_utf_16=>create_csr_from_sbcs( csr_sbcs = csr_sbcs be = abap_true ).
-*data(csr_utf_16_le) = zcl_csr_utf_16=>create_csr_from_sbcs( csr_sbcs = csr_sbcs be = abap_false ).
-*APPEND NEW zcl_csr_utf16( csr2 ) TO csrecognizers.
-*endif.
-*endloop.
+    LOOP AT csrecognizers INTO DATA(csr).
+      IF csr IS INSTANCE OF zcl_csr_sbcs.
+        TRY.
+            APPEND NEW zcl_csr_utf_16_sbcs( csr_sbcs = CAST #( csr ) big_endian = abap_true ) TO csrecognizers.
+            APPEND NEW zcl_csr_utf_16_sbcs( csr_sbcs = CAST #( csr ) big_endian = abap_false ) TO csrecognizers.
+          CATCH cx_parameter_invalid_range ##NO_HANDLER.
+        ENDTRY.
+      ENDIF.
+    ENDLOOP.
 
   ENDMETHOD.
 

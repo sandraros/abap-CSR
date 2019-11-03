@@ -1,9 +1,9 @@
 *&---------------------------------------------------------------------*
-*& Report z_csr_display_maps
+*& Report z_csr_display_ngrams
 *&---------------------------------------------------------------------*
 *&
 *&---------------------------------------------------------------------*
-REPORT z_csr_display_maps.
+REPORT z_csr_display_ngrams.
 
 DATA laiso TYPE laiso.
 SELECT-OPTIONS s_langu FOR laiso LOWER CASE.
@@ -15,10 +15,6 @@ START-OF-SELECTION.
   DATA results TYPE zcl_csr_detector=>ty_charset_matches.
 
   CREATE OBJECT csr_det.
-*  in = '4142425945'.
-*  csr_det->set_text( in ).
-*  results = csr_det->detect_all( ).
-*  result = csr_det->detect( ).
 
   LOOP AT csr_det->csrecognizers INTO DATA(csr).
     CASE TYPE OF csr.
@@ -28,18 +24,11 @@ START-OF-SELECTION.
           PERFORM sbcs USING csr_sbcs.
         ENDIF.
     ENDCASE.
-*  DATA charmap_8859_1 TYPE zcl_csr_sbcs=>ty_charmap_sbcs.
-*  charmap_8859_1 = NEW zcl_csr_8859_1_en( )->charmap_8859_1.
-*  DATA ngrams_8859_1_en TYPE zcl_csr_sbcs=>ty_ngrams_sbcs.
-*  ngrams_8859_1_en = NEW zcl_csr_8859_1_en( )->ngrams_8859_1_en.
-*  PERFORM x USING charmap_8859_1 ngrams_8859_1_fr.
   ENDLOOP.
 
 FORM sbcs
     USING
         sbcs TYPE REF TO zcl_csr_sbcs.
-*    charmap TYPE zcl_csr_sbcs=>ty_charmap_sbcs
-*    ngrams TYPE zcl_csr_sbcs=>ty_ngrams_sbcs.
 
   DATA index TYPE i.
   DATA byte TYPE x LENGTH 1.
@@ -95,4 +84,5 @@ FORM sbcs
       ADD 2 TO index.
     ENDDO.
   ENDDO.
+
 ENDFORM.

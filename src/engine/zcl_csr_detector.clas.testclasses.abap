@@ -410,7 +410,7 @@ CLASS ltc_aunit IMPLEMENTATION.
     exp_results = VALUE #(
         ( confidence = 63 language = 'ar' charset = 'ISO-8859-6' )
         ( confidence = 53 language = 'ar' charset = 'windows-1256' ) ).
-    LOOP AT results ASSIGNING FIELD-SYMBOL(<result>).
+    LOOP AT results FROM 1 TO 2 ASSIGNING FIELD-SYMBOL(<result>).
       READ TABLE exp_results INDEX sy-tabix ASSIGNING FIELD-SYMBOL(<exp_result>).
       cl_abap_unit_assert=>assert_subrc( exp = 0 act = sy-subrc ).
       cl_abap_unit_assert=>assert_equals( exp = <exp_result>-confidence act = <result>-confidence ).

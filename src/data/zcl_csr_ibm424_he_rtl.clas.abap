@@ -1,4 +1,4 @@
-"! <p class="shorttext synchronized" lang="en">Hebrew right-to-left</p>
+"! <p class="shorttext synchronized" lang="en">Hebrew Right-To-Left</p>
 "!
 CLASS zcl_csr_ibm424_he_rtl DEFINITION
   PUBLIC
