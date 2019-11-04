@@ -23,7 +23,7 @@ The language is detected for UTF-16 only (all languages of SBCS: Arabic, Czech, 
 ## Others
 
 * KOI8-R: Russian.
-* windows 1251: Russian.
-* windows 1256: Arabic.
-* IBM 424 (EBCDIC): Hebrew, Right-To-Left and Left-To-Right.
-* IBM 420 (EBCDIC): Arabic, Right-To-Left and Left-To-Right.
+* Windows-1251: Russian.
+* Windows-1256: Arabic.
+* IBM/EBCDIC 424 (no code page in SAP): Hebrew, Right-To-Left and Left-To-Right.
+* IBM/EBCDIC 420 (no code page in SAP): Arabic, Right-To-Left and Left-To-Right.
