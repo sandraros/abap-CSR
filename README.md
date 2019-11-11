@@ -3,6 +3,8 @@ ABAP Charset Recognizer (ICU)
 
 This ABAP tool determines the code page (character set) and the language (English, Russian, etc.) of a file, provided it contains text.
 
+It was introduced in this [SAP Community blog post](https://blogs.sap.com/?p=890574).
+
 ## WARNING
 
 It should not be used productively because the result can be incorrect. A human must validate the result. It's just a tool to help temporarily.
